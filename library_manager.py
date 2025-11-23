@@ -1,58 +1,4 @@
-"""
-Proyecto Práctico Integrador
-Aplicación de Consola: Sistema de Gestión de Biblioteca
-
-Descripción General:
-Este programa permite administrar una biblioteca básica desde consola.
-El usuario podrá registrar libros, gestionarlos, realizar préstamos,
-devolver libros, consultar información y ver estadísticas generales.
-
-Funcionalidades Requeridas:
-
-1. Registrar un libro:
-   - Campos: título, autor, año, ISBN, categoría y estado.
-   - Validaciones: título no vacío, ISBN único, año válido.
-   - Estado inicial del libro: "Disponible".
-
-2. Mostrar todos los libros:
-   - Lista completa ordenada alfabéticamente por título.
-   - Mostrar título, autor, año, ISBN, categoría y estado.
-
-3. Buscar libros:
-   - Búsqueda flexible por título, autor o categoría.
-   - No sensible a mayúsculas/minúsculas.
-
-4. Registrar un préstamo:
-   - Seleccionar un libro disponible.
-   - Registrar nombre de la persona y fecha del préstamo.
-   - Cambiar estado del libro a "Prestado".
-   - Validar que el libro no esté ya prestado.
-
-5. Registrar la devolución de un libro:
-   - Mostrar libros prestados.
-   - Seleccionar cuál se devuelve.
-   - Registrar fecha de devolución.
-   - Cambiar estado del libro a "Disponible".
-
-6. Mostrar historial de préstamos:
-   - Listar todos los préstamos realizados.
-   - Mostrar fechas, estado actual y persona que lo tomó.
-
-7. Estadísticas de la biblioteca:
-   - Total de libros.
-   - Libros disponibles.
-   - Libros prestados.
-   - Libro más prestado.
-   - Categoría más común.
-
-8. Eliminar libro:
-   - Mostrar lista numerada de libros.
-   - Confirmar antes de borrar.
-   - No permitir eliminar libros prestados.
-
-9. Salir del sistema:
-   - Mostrar mensaje de despedida.
-"""
+from operator import itemgetter
 
 #Listas
 libros = []
@@ -66,11 +12,10 @@ def registrar_libro():
     titulo = input("Ingrese el titulo del libro: ").strip().lower()
     autor = input("Ingrese el nombre del autor del libro: ").strip().lower()
     anio = int(input("Ingrese el año de publicacion: "))
-    while True: # Validar ISBN único
-        try:
-            isbn = int(input("Ingrese un ISBN único: "))
-        except ValueError:
-            print("Error: el ISBN debe ser un número.")
+    while True:
+        isbn = input("Ingrese un ISBN único: ").strip()
+        if not isbn:
+            print("Error: el ISBN no puede estar vacío.")
             continue
         isbn_existente = any(libro["isbn"] == isbn for libro in libros)
         if isbn_existente:
@@ -80,7 +25,14 @@ def registrar_libro():
     categoria = input("Ingrese la categoria correspondiente: ").strip().lower()
     estado = True  
     
-    libro = {"titulo": titulo, "autor": autor, "anio": anio, "isbn": isbn, "categoria": categoria, "estado": estado}
+    libro = {
+        "titulo": titulo,
+        "autor": autor,
+        "anio": anio,
+        "isbn": isbn,
+        "categoria": categoria,
+        "estado": estado
+    }
     libros.append(libro)   
     print(f"El libro '{titulo}' ha sido registrado exitosamente.")
     
@@ -90,10 +42,15 @@ def mostrar_libros():
     if not libros:
         print("No hay libros registrados.")
         return
-    libros_ordenados = sorted(libros, key=lambda x: x["titulo"])
+    
+    libros_ordenados = sorted(libros, key=itemgetter("titulo"))
+    
     for libro in libros_ordenados:
         estado_str = "Disponible" if libro["estado"] else "Prestado"
-        print(f"Título: {libro['titulo'].title()}, Autor: {libro['autor'].title()}, Año: {libro['anio']}, ISBN: {libro['isbn']}, Categoría: {libro['categoria'].title()}, Estado: {estado_str}")
+        print(
+            f"Título: {libro['titulo'].title()}, Autor: {libro['autor'].title()}, "
+            f"Año: {libro['anio']}, ISBN: {libro['isbn']}, Categoría: {libro['categoria'].title()}, "
+            f"Estado: {estado_str}")
 
 def buscar_libro():
       print("\n--- Buscar libro registrado ---")
