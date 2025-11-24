@@ -147,19 +147,6 @@ def mostrar_historial_prestamos():
       for prestamo in prestamos:
          estado = "Devuelto" if prestamo["fecha_devolucion"] else "En préstamo"
          print(f"ISBN: {prestamo['isbn']}, Persona: {prestamo['nombre_persona']}, Fecha Préstamo: {prestamo['fecha_prestamo']}, Fecha Devolución: {prestamo['fecha_devolucion'] if prestamo['fecha_devolucion'] else 'N/A'}, Estado: {estado}")
-         
-def mostrar_estadisticas():
-      print("\n--- Estadísticas de la biblioteca ---")
-      
-      total_libros = len(libros)
-      libros_disponibles = sum(1 for libro in libros if libro["estado"])
-      libros_prestados = total_libros - libros_disponibles
-      porcentaje_disponibles = (libros_disponibles / total_libros) * 100 if total_libros > 0 else 0
-      porcentaje_prestados = (libros_prestados / total_libros) * 100 if total_libros > 0 else 0
-      
-      print(f"Total de libros: {total_libros}")
-      print(f"Hay {porcentaje_disponibles:.2f}% de libros disponibles: {libros_disponibles}")
-      print(f"Hay {porcentaje_prestados:.2f}% de libros prestados: {libros_prestados}")
       
 def eliminar_libro():
       print("\n--- Eliminar libro registrado ---")
@@ -230,11 +217,10 @@ def menu():
         print("4. Registrar préstamo.")
         print("5. Registrar devolución.")
         print("6. Mostrar historial de préstamos.")
-        print("7. Estadísticas de la biblioteca.")
-        print("8. Eliminar libro.")
-        print("9. Salir")
+        print("7. Eliminar libro.")
+        print("8. Salir")
         
-        opcion = input("Elija un opción (1-9): ")
+        opcion = input("Elija un opción (1-8): ")
         
         if opcion == "1":
             registrar_libro()
@@ -249,10 +235,8 @@ def menu():
         elif opcion == "6":
             mostrar_historial_prestamos()
         elif opcion == "7":
-            mostrar_estadisticas()
-        elif opcion == "8":
             eliminar_libro()
-        elif opcion == "9":
+        elif opcion == "8":
             print("Muchas gracias por usar el sistema de gestión de biblioteca. ¡Hasta luego!")
             break
         else:
